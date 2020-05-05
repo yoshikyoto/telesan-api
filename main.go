@@ -37,26 +37,15 @@ func migrate() (err error){
 }
 
 func connectDb() (db *gorm.DB, err error) {
-	user := os.Getenv("TELESAN_DB_USER")
-	if user == "" {
-		user = "postgres"
+	// Heroku には DATABASE_URL というのが設定されている
+	url := os.Getenv("DATABASE_URL")
+	if url == "" {
+		// for local env
+		// local では sslmode を disable にしないとつながらない
+		url = "postgres://postgres:postgres@127.0.0.1:5432/telesan?sslmode=disable"
 	}
 
-	password := os.Getenv("TELESAN_DB_PASSWORD")
-	if password == "" {
-		password = "postgres"
-	}
-
-	host := os.Getenv("TELESAN_DB_HOST")
-	if host == "" {
-		host = "127.0.0.1"
-	}
-
-	database := os.Getenv("TELESAN_DB_DATABASE")
-	if database == "" {
-		database = "telesan"
-	}
-	return gorm.Open("postgres", "postgres://" + user+ ":" + password + "@" + host + ":5432" + "/" + database + "?sslmode=disable")
+	return gorm.Open("postgres", url)
 }
 
 type Monster struct {
