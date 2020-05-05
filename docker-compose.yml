@@ -1,0 +1,13 @@
+postgres:
+  image: postgres:12.2
+  container_name: postgres
+  ports:
+    - 5432:5432
+  environment:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: postgres
+    POSTGRES_DB: telesan
+    POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+  hostname: postgres
+  restart: always
+  user: postgres
